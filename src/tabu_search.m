@@ -1,4 +1,4 @@
-function [best_solution, best_cost, running_time] = tabu_search(objective_function, max_iterations, neighborhood_size, tabu_list_size, initial_point, target_point)
+function [best_solution, best_cost, running_time] = tabu_search(objective_function, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size)
     % Start timer
     tic;
     

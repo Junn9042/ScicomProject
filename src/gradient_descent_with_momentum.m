@@ -26,7 +26,6 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, x0, targe
     % Chuyển hàm symbolic gradient thành hàm số
     grad_f = matlabFunction(gradf, 'Vars', {x});
 
-
     x = x0; % Ensure x is a row vector
     v = zeros(size(x)); % Initialize velocity vector
     path = x;

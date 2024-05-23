@@ -10,7 +10,7 @@ initial_point = [-3, 5];  % Initial solution (2-dimensional point)
 target_point = [0, -1];
 
 % Run Tabu Search
-[best_solution, best_cost, running_time] = tabu_search(objective_function, max_iterations, neighborhood_size, tabu_list_size, initial_point, target_point);
+[best_solution, best_cost, running_time] = tabu_search(objective_function,initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size);
 
 % Display final result
 fprintf('Best Solution: x = [%f, %f]\n', best_solution(1), best_solution(2));

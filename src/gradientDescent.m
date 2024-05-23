@@ -1,4 +1,4 @@
-function [xmin, fmin, iter, elapsedTime] = gradientDescent(f, grad_f, x0, alpha_init, max_iter, tol, epsilon)
+function [xmin, fmin, elapsedTime] = gradientDescent(f, initial_point,target_point, alpha_init, max_iter, tol, epsilon)
     % Inputs:
     %   f - function handle to the objective function
     %   grad_f - function handle to the gradient of the objective function
@@ -15,7 +15,18 @@ function [xmin, fmin, iter, elapsedTime] = gradientDescent(f, grad_f, x0, alpha_
     %   elapsedTime - time taken to run the algorithm
 
     tic; % start timing
-    x = x0(:)'; % Ensure x is a row vector
+    
+    dim = length(initial_point);
+
+    % Khởi tạo biến symbolic
+    x = sym('x', [1, dim]); 
+    % Tính gradient của hàm mục tiêu
+    gradf = gradient(f(x), x);
+
+    % Chuyển hàm symbolic gradient thành hàm số
+    grad_f = matlabFunction(gradf, 'Vars', {x});
+
+    x = initial_point; % Ensure x is a row vector
     iter = 0;
     path = x; % Record the path
 
@@ -55,11 +66,16 @@ function [xmin, fmin, iter, elapsedTime] = gradientDescent(f, grad_f, x0, alpha_
     F = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
     contour(X1, X2, F, 50);
     hold on;
-    plot(path(:,1), path(:,2), '-o', 'LineWidth', 2, 'MarkerSize', 5);
+    plot(path(:,1), path(:,2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+
+    plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+
     xlabel('x1');
     ylabel('x2');
     title('Contour plot of f(x) with solution path');
     legend('Contours', 'Solution path');
     hold off;
+
+    
 end
 
