@@ -1,4 +1,4 @@
-function [xmin, fmin, elapsedTime] = gradientDescent(f, initial_point,target_point, alpha_init, max_iter, tol, epsilon)
+function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_point, alpha_init, max_iter, tol, epsilon)
     % Inputs:
     %   f - function handle to the objective function
     %   grad_f - function handle to the gradient of the objective function

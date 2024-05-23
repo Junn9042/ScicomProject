@@ -1,43 +1,43 @@
-function [bestSol, bestCost, elapsedTime] = VNS(f, initialPoint, targetPoint, MaxIt, kMax)
+function [best_solution, best_cost, elapsed_time] = VNS(f, initial_point, target_point, max_iterations, kMax)
 
     tic; 
     
-    bestSol = initialPoint;  % Sử dụng điểm bắt đầu cung cấp
-    nVar = length(initialPoint);
+    best_solution = initial_point;  % Sử dụng điểm bắt đầu cung cấp
+    nVar = length(initial_point);
     
-    bestCost = f(bestSol);
+    best_cost = f(best_solution);
 
     iteration_numbers = [];
     best_costs = [];
     best_solutions = [];
 
     % Lặp VNS
-    for it = 1:MaxIt
+    for it = 1:max_iterations
         for k = 1:kMax
             % Shake
-            newSol = Shake(bestSol, k, nVar);
+            newSol = Shake(best_solution, k, nVar);
             % Local Search
             newSol = LocalSearch(newSol, f, nVar);
             newCost = f(newSol);
             
             % Cập nhật nếu tìm thấy giải pháp tốt hơn
-            if newCost < bestCost
-                bestSol = newSol;
-                bestCost = newCost;
+            if newCost < best_cost
+                best_solution = newSol;
+                best_cost = newCost;
                 k = 1;  % reset k
 
                 % Store the iteration number and best cost for plotting
                 iteration_numbers = [iteration_numbers, it];
-                best_costs = [best_costs, bestCost];
-                best_solutions = [best_solutions; bestSol];
+                best_costs = [best_costs, best_cost];
+                best_solutions = [best_solutions; best_solution];
             end
         end
     end
     
-    elapsedTime = toc;  % Lấy thời gian kết thúc
+    elapsed_time = toc;  % Lấy thời gian kết thúc
 
 
-    if length(initialPoint) == 2
+    if length(initial_point) == 2
          % Plot the contour and the best solutions
         figure;
         % Create a grid of points for the contour plot
@@ -52,7 +52,7 @@ function [bestSol, bestCost, elapsedTime] = VNS(f, initialPoint, targetPoint, Ma
         plot(best_solutions(:, 1), best_solutions( :, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         % Plot the last solution with a different color
-        plot(targetPoint(1), targetPoint(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+        plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
         
         xlabel('x');
         ylabel('y');

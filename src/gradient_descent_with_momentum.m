@@ -1,4 +1,4 @@
-function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, x0, targetPoint, alpha, beta, max_iter, tol)
+function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_point, target_point, alpha, beta, max_iter, tol)
     % Inputs:
     %   f - function handle to the objective function
     %   grad_f - function handle to the gradient of the objective function
@@ -15,7 +15,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, x0, targe
     %   elapsedTime - time taken to run the algorithm
 
     tic; % start timing
-    dim = length(x0);
+    dim = length(initial_point);
 
     % Khởi tạo biến symbolic
     x = sym('x', [1, dim]);  % Khai báo một vector cột gồm 'dim' biến symbolic
@@ -26,7 +26,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, x0, targe
     % Chuyển hàm symbolic gradient thành hàm số
     grad_f = matlabFunction(gradf, 'Vars', {x});
 
-    x = x0; % Ensure x is a row vector
+    x = initial_point; % Ensure x is a row vector
     v = zeros(size(x)); % Initialize velocity vector
     path = x;
     iter = 0;
@@ -59,7 +59,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, x0, targe
         plot(path(:, 1), path( :, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         % Plot the last solution with a different color
-        plot(targetPoint(1), targetPoint(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+        plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
         
         xlabel('x');
         ylabel('y');

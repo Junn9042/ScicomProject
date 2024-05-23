@@ -1,4 +1,4 @@
-function [best_solution, best_cost, running_time] = tabu_search(objective_function, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size)
+function [best_solution, best_cost, elapsed_time] = tabu_search(objective_function, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size)
     % Start timer
     tic;
     
@@ -51,7 +51,7 @@ function [best_solution, best_cost, running_time] = tabu_search(objective_functi
     end
 
     % Stop timer and calculate running time
-    running_time = toc;
+    elapsed_time = toc;
 
    if length(initial_point) == 2
         % Plot the contour and the best solutions
