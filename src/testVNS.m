@@ -8,7 +8,7 @@ f = @(x) x^4 - 4*x^3 + x^2 + 9*x;
 
 MaxIt = 1000;
 kMax = 5;
-initialPoint = [-5, 5];
+initialPoint = [5, 5];
 
 % Call VNS
 [bestSol, bestCost, elapsedTime] = VNS(gp, initialPoint, [0, -1], MaxIt, kMax);

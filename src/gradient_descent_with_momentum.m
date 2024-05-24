@@ -31,8 +31,8 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
     path = x;
     iter = 0;
     while iter < max_iter
-        grad = grad_f(x);
-        v = beta * v - alpha * grad';
+        grad = grad_f(x)
+        v = beta * v - alpha * grad'
         x_new = x + v;
         path = [path; x_new];
         if norm(x_new - x, 2) < tol

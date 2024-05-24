@@ -1,9 +1,10 @@
 % Define the objective function
-f = @(x) x^4 - 4*x^3 + x^2 + 9*x;
+f = @(x)(1 + (x(1) + x(2) + 1)^2 * (19 - 14*x(1) + 3*x(1)^2 - 14*x(2) + 6*x(1)*x(2) + 3*x(2)^2)) * (30 + (2*x(1) - 3*x(2))^2 * (18 - 32*x(1) + 12*x(1)^2 + 48*x(2) - 36*x(1)*x(2) + 27*x(2)^2));
+
 
 % Set initial guess, maximum number of iterations, and tolerance
-initial_point = 5;
-target_point = 1;
+initial_point = [3, 3];
+target_point = [0, -1];
 max_iterations = 1000;
 tol = 1e-6;
 

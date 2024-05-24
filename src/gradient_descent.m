@@ -60,8 +60,8 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
     % Plot contour of the function and solution path
     figure;
     % Generate grid for contour plot
-    x1_vals = linspace(min(path(:,1)) - 1, max(path(:,1)) + 1, 100);
-    x2_vals = linspace(min(path(:,2)) - 1, max(path(:,2)) + 1, 100);
+    x1_vals = linspace(-5, 5, 100);
+    x2_vals = linspace(-5, 5, 100);
     [X1, X2] = meshgrid(x1_vals, x2_vals);
     F = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
     contour(X1, X2, F, 50);
