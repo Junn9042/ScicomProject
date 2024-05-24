@@ -1,0 +1,19 @@
+Newton:
+test GP function:
+ 	Khong hoi tu khi initial point tu goc phan tu thu 1, 4
+	O goc phan tu thu 3:
+		+ Khi initial point xa -> Hoi tu sai
+
+test function f = x^4 - 4*x^3 + x^2 + 9*x
+	Ket tai local minimum : 2.402
+	Global minimum : -0.714
+GD
+test Rosenbrock function:
+	Khong hoi tu khi initial point o qua xa minimum point, hoac do alpha lon (~0.02)
+	Hoi tu cham khi alpha qua nho (~0.0005 - 0.0001)
+
+Tabu Search & VNS
+test function f = x^4 - 4*x^3 + x^2 + 9*x
+	Neu vung tim kiem neighbour khong du lon -> ket tai local minumum 2.4 khi initial point > local minumum
+	Global minimum : -0.714
+	Local minimum : 2.402
