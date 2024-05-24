@@ -6,10 +6,7 @@ function [best_solution, best_cost, elapsed_time] = VNS(f, initial_point, target
     nVar = length(initial_point);
     
     best_cost = f(best_solution);
-
-    iteration_numbers = [];
-    best_costs = [];
-    best_solutions = [];
+    best_solutions = [initial_point];
 
     % Lặp VNS
     for it = 1:max_iterations
@@ -27,8 +24,6 @@ function [best_solution, best_cost, elapsed_time] = VNS(f, initial_point, target
                 k = 1;  % reset k
 
                 % Store the iteration number and best cost for plotting
-                iteration_numbers = [iteration_numbers, it];
-                best_costs = [best_costs, best_cost];
                 best_solutions = [best_solutions; best_solution];
             end
         end

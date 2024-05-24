@@ -10,8 +10,8 @@ f = @(x) 100*(x(2)-x(1)^2)^2 + (1-x(1))^2;
 % 
 % fval = f(x); gval = gf(x); H = hf(x); ng = norm(gval); nf = 1; tol = 0.05; iter = 0;
 target_point = [1, 1];
-tol = 0.05;
-max_iter = 50;
+tol = 1e-6;
+max_iter = 1000;
 [x_final, fval_final, iter_final, x1_history, x2_history] = newton_method(x, f, max_iter, tol, target_point);
 
 function [x, fval, iter, x1_history, x2_history] = newton_method(x0, f, max_iter, tol, target_point)
@@ -64,8 +64,6 @@ function [x, fval, iter, x1_history, x2_history] = newton_method(x0, f, max_iter
         
         % alpha: Bước đi trong quá trình tìm kiếm đường dẫn.
         alpha = 1;
-        alpha = 1;
-        alpha_max = 2; % Giá trị tối đa của alpha
         alpha_min = 1e-6; % Giá trị nhỏ nhất của alpha
         
         nf = 0;
@@ -92,12 +90,6 @@ function [x, fval, iter, x1_history, x2_history] = newton_method(x0, f, max_iter
             end
                 alpha = alpha / 2; % Giảm alpha nếu không thỏa mãn điều kiện
         end
-        
-        end
-        if alpha < alpha_min
-            fprintf('Cannot find alpha. Keep using x x.\n');
-        else
-            fprintf('%3i %3.2e %3.2e %3.2e %3.2e%i\n', iter, fval, ng, norm(x-xstart), alpha, nf);
         end
     end
     

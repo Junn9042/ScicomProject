@@ -1,29 +1,29 @@
 % Định nghĩa hàm f(x)
-% f = @(x) 100*(x(2)-x(1)^2)^2 + (1-x(1))^2;
-% 
+f = @(x)(1 + (x(1) + x(2) + 1)^2 * (19 - 14*x(1) + 3*x(1)^2 - 14*x(2) + 6*x(1)*x(2) + 3*x(2)^2)) * (30 + (2*x(1) - 3*x(2))^2 * (18 - 32*x(1) + 12*x(1)^2 + 48*x(2) - 36*x(1)*x(2) + 27*x(2)^2));
+
 % Điểm khởi tạo
-% x0 = [1; 2];
-% x1_history = x0(1);
-% x2_history = x0(2);
+x0 = [1; 2];
+x1_history = x0(1);
+x2_history = x0(2);
 % 
 % Số lần lặp tối đa và độ chính xác mong muốn
-% max_iter = 1000;
-% tol = 1e-6;
+max_iter = 1000;
+tol = 1e-6;
 % 
 % Gọi hàm quasiNewton để tìm điểm cực tiểu và lưu các điểm hội tụ
-% [x_min, f_min, convergence_points, x1_history, x2_history] = quasiNewton(f, x0, max_iter, tol);
+[x_min, f_min, convergence_points, x1_history, x2_history] = quasiNewton(f, x0, max_iter, tol);
 % 
 % Vẽ đường đồng mức của hàm
-% [X,Y] = meshgrid(-2:0.1:2, -1:0.1:3);
-% Z = 100 * (Y - X.^2).^2 + (1 - X).^2;
-% contour(X, Y, Z, 20);
-% hold on;
-% plot(x1_history, x2_history, 'r-o', 'LineWidth', 2, 'MarkerSize', 6);
-% xlabel('x1');
-% ylabel('x2');
-% title('Contour plot and convergence path');
-% legend('Contours', 'Convergence path');
-% hold off;
+[X,Y] = meshgrid(-2:0.1:2, -1:0.1:3);
+Z = 100 * (Y - X.^2).^2 + (1 - X).^2;
+contour(X, Y, Z, 20);
+hold on;
+plot(x1_history, x2_history, 'r-o', 'LineWidth', 2, 'MarkerSize', 6);
+xlabel('x1');
+ylabel('x2');
+title('Contour plot and convergence path');
+legend('Contours', 'Convergence path');
+hold off;
 
 function [x_min, f_min, convergence_points, x1_history, x2_history] = quasiNewton(f, x0, max_iter, tol)
     % Khởi tạo

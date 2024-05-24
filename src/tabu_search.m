@@ -11,8 +11,7 @@ function [best_solution, best_cost, elapsed_time] = tabu_search(objective_functi
     tabu_list = NaN(tabu_list_size, numel(initial_point));
 
     % Arrays to store the iteration numbers and best costs for plotting
-    best_costs = [];
-    best_solutions = [];
+    best_solutions = [initial_point];
 
     % Tabu Search Algorithm
     for iter = 1:max_iterations
@@ -45,7 +44,6 @@ function [best_solution, best_cost, elapsed_time] = tabu_search(objective_functi
             best_cost = best_neighbor_cost;
 
             % Store the iteration number and best cost for plotting
-            best_costs = [best_costs, best_cost];
             best_solutions = [best_solutions; best_solution];
         end
     end
@@ -81,7 +79,7 @@ end
 % Function to generate neighboring solutions
 function neighbors = generate_neighbors(solution, size)
     % Perturb each variable in the solution to generate neighbors
-    perturbation = 0.2; % Perturbation factor
+    perturbation = 0.5; % Perturbation factor
     neighbors = repmat(solution, size, 1) + perturbation * randn(size, numel(solution));
 end
 

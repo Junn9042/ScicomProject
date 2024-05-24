@@ -1,10 +1,10 @@
 % Example usage:
-f = @(x) x(1)^2 + x(2)^2; % Objective function
-initial_point = [5, 5]; % Initial point (row vector)
-target_point = [0, 0];
-alpha = 0.1; % Initial learning rate
-beta = 0.05;
-max_iter = 1000; % Maximum number of iterations
+f = @(x) 100*(x(2)-x(1)^2)^2 + (1-x(1))^2;
+initial_point = [2, 2]; % Initial point (row vector)
+target_point = [1, 1];
+alpha = 0.001; % Initial learning rate
+beta = 0.005;
+max_iter = 10000; % Maximum number of iterations
 tol = 1e-6; % Tolerance for stopping criterion
 epsilon = 0.5; % Epsilon parameter for backtracking line search
 
