@@ -12,6 +12,11 @@ test Rosenbrock function:
 	Khong hoi tu khi initial point o qua xa minimum point, hoac do alpha lon (~0.02)
 	Hoi tu cham khi alpha qua nho (~0.0005 - 0.0001)
 
+GD co momentum
+test GP function:
+	Toc do thay doi x qua nhanh -> x ra inf
+	Chi dung khi cho initial point o goc phan tu thu 3
+
 Tabu Search & VNS
 test function f = x^4 - 4*x^3 + x^2 + 9*x
 	Neu vung tim kiem neighbour khong du lon -> ket tai local minumum 2.4 khi initial point > local minumum
