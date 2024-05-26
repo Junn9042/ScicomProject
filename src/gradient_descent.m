@@ -57,25 +57,25 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
     xmin = x;
     fmin = f(x);
 
-    % Plot contour of the function and solution path
-    figure;
-    % Generate grid for contour plot
-    x1_vals = linspace(-5, 5, 100);
-    x2_vals = linspace(-5, 5, 100);
-    [X1, X2] = meshgrid(x1_vals, x2_vals);
-    F = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
-    contour(X1, X2, F, 50);
-    hold on;
-    plot(path(:,1), path(:,2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
-
-    plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
-
-    xlabel('x1');
-    ylabel('x2');
-    title('Contour plot of f(x) with solution path');
-    legend('Contours', 'Solution path');
-    hold off;
-
+    if length(initial_point)==2
+            % Plot contour of the function and solution path
+        figure;
+        % Generate grid for contour plot
+        x1_vals = linspace(-5, 5, 100);
+        x2_vals = linspace(-5, 5, 100);
+        [X1, X2] = meshgrid(x1_vals, x2_vals);
+        F = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
+        contour(X1, X2, F, 50);
+        hold on;
+        plot(path(:,1), path(:,2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+    
+        plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+    
+        xlabel('x1');
+        ylabel('x2');
+        title('Contour plot of f(x) with solution path');
+        legend('Contours', 'Solution path');
+        hold off;
+    end
     
 end
-

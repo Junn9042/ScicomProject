@@ -1,4 +1,4 @@
-function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_point, target_point, alpha, beta, max_iter, tol)
+function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_point, target_point, alpha, beta, max_iterations, tol)
     % Inputs:
     %   f - function handle to the objective function
     %   grad_f - function handle to the gradient of the objective function
@@ -30,7 +30,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
     v = zeros(size(x)); % Initialize velocity vector
     path = x;
     iter = 0;
-    while iter < max_iter
+    while iter < max_iterations
         grad = grad_f(x);
         v = beta * v - alpha * grad';
         x_new = x + v;
@@ -48,7 +48,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
     if dim ==2 
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-5, 5, 100), linspace(-5, 5, 100));
+        [X, Y] = meshgrid(linspace(-2, 2, 100), linspace(-2, 2, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
@@ -68,4 +68,3 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
         hold off;
     end
 end
-

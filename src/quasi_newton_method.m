@@ -89,4 +89,3 @@ function H = update_BFGS(H, s, y)
     term2 = (eye(length(H)) - rho * y * s');
     H = term1 * H * term2 + rho * s * s';
 end
-
