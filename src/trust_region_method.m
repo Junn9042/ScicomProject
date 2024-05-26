@@ -1,64 +1,55 @@
 function [x, fval, elapsed_time] = trust_region_method(f, initial_point, target_point, max_iterations)
-    % Thiết lập các thông số mặc định nếu không được truyền vào
-
-    % Bắt đầu đếm thời gian
+    % Initialize B as identity matrix
+    B = eye(length(initial_point));
+    
+    % Start counting time
     tic;
-
-    % Khởi tạo
+    
+     % Khởi tạo
     x_sym = sym('x', [length(initial_point), 1]); % Biến symbolic
     x = initial_point(:); % Chuyển x0 thành vector cột
 
     Delta = 1;
     tolFun = 1e-6;
     tolX = 1e-6;
-    eta1 = 0.5;
-    eta2 = 0.2;
+    eta1 = 0.75;
+    eta2 = 0.375;
     iter = 0;
+
     best_solutions = [initial_point'];
     dim = length(initial_point);
 
     % Tính gradient của hàm mục tiêu
     gradf = gradient(f(x_sym), x_sym);
-    hessf = hessian(f(x_sym), x_sym);
 
     % Chuyển hàm symbolic gradient thành hàm số
     gradFunc = matlabFunction(gradf, 'Vars', {x_sym});
-    hessFunc = matlabFunction(hessf, 'Vars', {x_sym});
-
-    % Lưu trữ lịch sử x và giá trị hàm mục tiêu
-    history = zeros(max_iterations, dim);
-    fval_history = zeros(max_iterations, 1);
-
+    
     while iter < max_iterations
         iter = iter + 1;
-
-        % Tính toán giá trị hàm mục tiêu và gradient
+        
+        % Compute function value and gradient
         fval = f(x);
         grad = gradFunc(x);
 
-        % Lưu trữ lịch sử
-        history(iter, :) = x';
-        fval_history(iter) = fval;
-
-        % Xây dựng mô hình bậc hai
-        B = eye(dim); % Ma trận Hessian đơn giản (có thể sử dụng các phương pháp xấp xỉ khác)
+        % Build quadratic model
         m = @(p) fval + grad' * p + 0.5 * p' * B * p;
-
-        % Giải bài toán con trong vùng tin cậy
-        if norm(grad) > 0
-            p = -Delta * grad / norm(grad); % Hướng đi đơn giản theo gradient
-        else
-            p = zeros(size(x));
-        end
-
-        % Tính toán giá trị hàm mục tiêu tại điểm mới
+        
+        % Solve trust region subproblem
+        [p, ~] = dogleg_method(grad, B, Delta);
+        
+        % Compute new function value at trial point
         x_new = x + p;
         fval_new = f(x_new);
-
-        % Tính toán tỷ lệ cải thiện thực tế so với dự đoán
-        rho = (fval - fval_new) / (m(zeros(size(x))) - m(p));
-
-        % Cập nhật điểm hiện tại và bán kính vùng tin cậy
+        
+        % Compute actual and predicted reduction
+        actual_reduction = fval - fval_new;
+        predicted_reduction = m(zeros(size(x))) - m(p);
+        
+        % Compute rho
+        rho = actual_reduction / predicted_reduction;
+        
+        % Update trust region radius
         if rho >= eta1
             x = x_new;
             best_solutions = [best_solutions, x];
@@ -69,19 +60,20 @@ function [x, fval, elapsed_time] = trust_region_method(f, initial_point, target_
         else
             Delta = Delta / 2;
         end
-
-        % Kiểm tra hội tụ
-        if abs(fval - fval_new) < tolFun
+        
+        % Check convergence
+        if abs(fval - fval_new) < tolFun || norm(p) < tolX
             break;
         end
-        if norm(p) < tolX
-            break;
-        end
+        
+        % Update B using BFGS
+        s = p;
+        y = gradient(f(x_new)) - grad;
+        B = update_BFGS(B, s, y);
     end
-
-    % Kết thúc đếm thời gian và tính tổng thời gian chạy
+    
+    % End counting time
     elapsed_time = toc;
-
     if length(initial_point) == 2
         
         % Create a grid of points for the contour plot
@@ -107,3 +99,53 @@ function [x, fval, elapsed_time] = trust_region_method(f, initial_point, target_
     end
 end
 
+function B = update_BFGS(B, s, y)
+    % Update B using BFGS formula
+    rho = 1 / (y' * s);
+    term1 = (eye(length(B)) - rho * s * y');
+    term2 = (eye(length(B)) - rho * y * s');
+    B = term1 * B * term2 + rho * s * s';
+end
+
+function [p, fval] = dogleg_method(grad, B, Delta)
+    % Solve trust region subproblem using dogleg method
+    pU = -Delta * grad / norm(grad); % Compute Cauchy point
+    if norm(B * grad) <= Delta
+        pB = -B \ grad; % Full step (Newton step)
+    else
+        % Compute scaled Newton step
+        pB = -(grad' * grad) / (grad' * B * grad) * grad;
+    end
+    if norm(pB) <= Delta
+        p = pB; % Step lies inside the trust region
+    else
+        % Compute dogleg step
+        pD = find_dogleg_step(grad, B, Delta);
+        if norm(pD) >= norm(pU)
+            p = pU; % Choose Cauchy step
+        else
+            p = pD; % Choose dogleg step
+        end
+    end
+    fval = 0.5 * p' * B * p + grad' * p;
+end
+
+function p = find_dogleg_step(grad, B, Delta)
+    % Compute dogleg step using polynomial interpolation
+    pGN = -B \ grad; % Gauss-Newton step (Newton step)
+    if norm(pGN) <= Delta
+        p = pGN; % Step lies inside the trust region
+    else
+        pSD = -grad * (grad' * grad) / (grad' * B * grad); % Steepest descent step
+        if norm(pSD) >= Delta
+            p = Delta * pSD / norm(pSD); % Step lies on the boundary
+        else
+            % Compute coefficients of quadratic interpolation
+            a = pGN' * pGN;
+            b = 2 * pGN' * (pSD - pGN);
+            c = (pSD - pGN)' * (pSD - pGN) - Delta^2;
+            tau = (-b + sqrt(b^2 - 4 * a * c)) / (2 * a);
+            p = pGN + tau * (pSD - pGN); % Dogleg step
+        end
+    end
+end

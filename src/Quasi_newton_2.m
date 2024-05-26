@@ -3,7 +3,7 @@
 f = @(x) 100*(x(2)-x(1)^2)^2 + (1-x(1))^2;  % Example: simple quadratic function
 
 % Initial guess
-x0 = [0; 0];
+x0 = [-1; -1];
 
 % Parameters
 max_iter = 1000;
