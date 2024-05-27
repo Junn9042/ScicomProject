@@ -28,7 +28,7 @@ function [best_solution, best_cost, elapsed_time] = newton_method(f, initial_poi
     
     % Initialize variables
     current_point = initial_point;
-    path = current_point'; % Record the initial point
+    best_solutions = current_point'; % Record the initial point
     
     for iter = 1:max_iterations
         % Evaluate the gradient and Hessian at the current point
@@ -47,7 +47,7 @@ function [best_solution, best_cost, elapsed_time] = newton_method(f, initial_poi
         current_point = current_point + step;
         
         % Record the current point in the path
-        path = [path; current_point'];
+        best_solutions = [best_solutions; current_point'];
     end
     
     % Calculate the final cost
@@ -62,16 +62,16 @@ function [best_solution, best_cost, elapsed_time] = newton_method(f, initial_poi
     if length(initial_point) == 2
         
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-5, 5, 100), linspace(-5, 5, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
         
         % Plot the contour
         figure;
-        contour(X, Y, Z, 50); % 50 contour levels
+        contour(X, Y, Z, 200); % 50 contour levels
         hold on;
         
         % Plot the best solutions
-        plot(path(:, 1), path(:, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+        plot(best_solutions(:, 1), best_solutions(:, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
         
         % Plot the last solution with a different color
         plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');

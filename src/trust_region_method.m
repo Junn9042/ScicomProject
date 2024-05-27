@@ -77,7 +77,7 @@ function [x, fval, elapsed_time] = trust_region_method(f, initial_point, target_
     if length(initial_point) == 2
         
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-5, 5, 100), linspace(-5, 5, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
         
         % Plot the contour

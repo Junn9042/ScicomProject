@@ -28,13 +28,13 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
 
     x = initial_point; % Ensure x is a row vector
     v = zeros(size(x)); % Initialize velocity vector
-    path = x;
+    best_solutions = x;
     iter = 0;
     while iter < max_iterations
         grad = grad_f(x);
         v = beta * v - alpha * grad';
         x_new = x + v;
-        path = [path; x_new];
+        best_solutions = [best_solutions; x_new];
         if norm(x_new - x, 2) < tol
             break;
         end
@@ -48,15 +48,15 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
     if dim ==2 
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-2, 2, 100), linspace(-2, 2, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
-        contour(X, Y, Z, 50); % 50 contour levels
+        contour(X, Y, Z, 200); % 50 contour levels
         hold on;
     
         % Plot the best solutions
-        plot(path(:, 1), path( :, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+        plot(best_solutions(:, 1), best_solutions( :, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         % Plot the last solution with a different color
         plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');

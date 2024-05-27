@@ -1,4 +1,4 @@
-function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_point, alpha_init, max_iter, tol, epsilon)
+function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_point, alpha, max_iterations, tol, epsilon)
     % Inputs:
     %   f - function handle to the objective function
     %   grad_f - function handle to the gradient of the objective function
@@ -17,6 +17,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
     tic; % start timing
     
     dim = length(initial_point);
+    alpha_min = 1e-4;
 
     % Khởi tạo biến symbolic
     x = sym('x', [1, dim]); 
@@ -28,11 +29,11 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
 
     x = initial_point; % Ensure x is a row vector
     iter = 0;
-    path = x; % Record the path
+    best_solutions = x; % Record the path
 
-    while iter < max_iter
+    while iter < max_iterations
         grad = grad_f(x)'; % Ensure gradient is a row vector
-        alpha = alpha_init;
+        alpha = alpha;
         while true
             u = x - alpha * grad;
             if f(u) <= f(x) - epsilon * alpha * norm(grad)^2
@@ -43,7 +44,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
         end
 
         x_new = x - alpha * grad;
-        path = [path; x_new];
+        best_solutions = [best_solutions; x_new];
 
         if norm(x_new - x, 2) < tol || norm(grad, 2) < tol
             break;
@@ -61,13 +62,11 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
             % Plot contour of the function and solution path
         figure;
         % Generate grid for contour plot
-        x1_vals = linspace(-5, 5, 100);
-        x2_vals = linspace(-5, 5, 100);
-        [X1, X2] = meshgrid(x1_vals, x2_vals);
-        F = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
-        contour(X1, X2, F, 50);
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
+        Z = arrayfun(@(x, y) f([x, y]), X, Y);
+        contour(X, Y, Z, 200);
         hold on;
-        plot(path(:,1), path(:,2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+        plot(best_solutions(:,1), best_solutions(:,2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
     

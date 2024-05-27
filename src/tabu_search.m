@@ -1,11 +1,11 @@
-function [best_solution, best_cost, elapsed_time] = tabu_search(objective_function, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size)
+function [best_solution, best_cost, elapsed_time] = tabu_search(f, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size)
     % Start timer
     tic;
     
     % Initialization
     current_solution = initial_point;
     best_solution = current_solution;
-    best_cost = objective_function(current_solution);
+    best_cost = f(current_solution);
 
     % Tabu list
     tabu_list = NaN(tabu_list_size, numel(initial_point));
@@ -21,7 +21,7 @@ function [best_solution, best_cost, elapsed_time] = tabu_search(objective_functi
         % Evaluate neighbors
         neighbor_costs = zeros(size(neighbors, 1), 1);
         for i = 1:size(neighbors, 1)
-            neighbor_costs(i) = objective_function(neighbors(i, :));
+            neighbor_costs(i) = f(neighbors(i, :));
         end
         
         % Find best non-tabu neighbor
@@ -55,11 +55,11 @@ function [best_solution, best_cost, elapsed_time] = tabu_search(objective_functi
         % Plot the contour and the best solutions
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-5, 5, 100), linspace(-5, 5, 100));
-        Z = arrayfun(@(x, y) objective_function([x, y]), X, Y);
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
+        Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
-        contour(X, Y, Z, 100); % 50 contour levels
+        contour(X, Y, Z, 200); % 50 contour levels
         hold on;
     
         % Plot the best solutions

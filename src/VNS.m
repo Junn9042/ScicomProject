@@ -36,18 +36,18 @@ function [best_solution, best_cost, elapsed_time] = VNS(f, initial_point, target
          % Plot the contour and the best solutions
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-2, 2, 100), linspace(-2, 2, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
-        contour(X, Y, Z, 50); % 50 contour levels
+        contour(X, Y, Z, 200); % 50 contour levels
         hold on;
     
         % Plot the best solutions
         plot(best_solutions(:, 1), best_solutions( :, 2), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         % Plot the last solution with a different color
-        plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+        plot(target_point(:, 1), target_point(:, 2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
         
         xlabel('x');
         ylabel('y');

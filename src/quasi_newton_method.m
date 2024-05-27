@@ -1,4 +1,4 @@
-function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, tol, max_iterations, target_point)
+function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, target_point, tol, max_iterations)
     % Quasi-Newton method using BFGS update
     % Input:
     % func - handle to the objective function
@@ -24,7 +24,7 @@ function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, tol, ma
 
     H = eye(n);  % Initial approximation to the Hessian is the identity matrix
     iter = 0;
-    x_history = initial_point';
+    best_solutions = initial_point';
 
     for k = 1:max_iterations
         g = gradf(x);  % Gradient at current point
@@ -50,7 +50,7 @@ function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, tol, ma
         
         x = x_new;  % Move to the new point
         iter = iter + 1;
-        x_history = [x_history, x];
+        best_solutions = [best_solutions, x];
         
     end
 
@@ -60,18 +60,18 @@ function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, tol, ma
          % Plot the contour and the best solutions
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(-5, 5, 100), linspace(-5, 5, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
-        contour(X, Y, Z, 50); % 50 contour levels
+        contour(X, Y, Z, 200); % 50 contour levels
         hold on;
     
         % Plot the best solutions
-        plot(x_history(1, :), x_history(2, :), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
+        plot(best_solutions(1, :), best_solutions(2, :), 'r-o', 'LineWidth', 2, 'MarkerFaceColor', 'r');
     
         % Plot the last solution with a different color
-        plot(target_point(1), target_point(2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
+        plot(target_point(:, 1), target_point(:, 2), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g');
         
         xlabel('x');
         ylabel('y');
