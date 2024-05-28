@@ -60,17 +60,17 @@ booth = @(x) (x(1) + 2*x(2) - 7)^2 + (2*x(1) + x(2) - 5)^2;
 
 max_iterations = 1000;
 kMax = 5;
-initial_point = [10 , 10];
-target_point = [1, 3];
+initial_point = [4.5, 2];
+target_point = [3, 0.5];
 alpha = 0.01;
 beta = 0.4;
-tol = 1e-5;
+tol = 10^-2;
 epsilon = 0.5;
 neighborhood_size = 10;
 tabu_list_size = 5;
 
 
-[bestSol, bestCost, elapsed_time] = gradient_descent_with_momentum(booth, initial_point, target_point, alpha, beta, max_iterations, tol);
+[bestSol, bestCost, elapsed_time] = tabu_search(beale, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size);
 
 % Display results
 disp('Best Solution:');
