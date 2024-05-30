@@ -63,7 +63,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent_with_momentum(f, initial_p
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Gradient Descent With Momentum');
         grid on;
         hold off;
     end

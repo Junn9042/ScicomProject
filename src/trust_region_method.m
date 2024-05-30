@@ -93,7 +93,7 @@ function [x, fval, elapsed_time] = trust_region_method(f, initial_point, target_
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Trust Region');
         grid on;
         hold off;
     end

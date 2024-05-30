@@ -70,7 +70,7 @@ function [best_solution, best_cost, elapsed_time] = tabu_search(f, initial_point
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Tabu Search');
         grid on;
         hold off;
    end

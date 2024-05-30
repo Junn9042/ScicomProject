@@ -51,7 +51,7 @@ function [best_solution, best_cost, elapsed_time] = VNS(f, initial_point, target
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Variable Neighbour Search');
         grid on;
         hold off;
     

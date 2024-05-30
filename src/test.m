@@ -60,22 +60,41 @@ booth = @(x) (x(1) + 2*x(2) - 7)^2 + (2*x(1) + x(2) - 5)^2;
 
 max_iterations = 1000;
 kMax = 5;
-initial_point = [4.5, 2];
-target_point = [3, 0.5];
+initial_point = [0.7, 0.5, 1];
+target_point = [0.11, 0.555, 0.855];
 alpha = 0.01;
 beta = 0.4;
-tol = 10^-2;
+tol = 1e-6;
 epsilon = 0.5;
 neighborhood_size = 10;
 tabu_list_size = 5;
 
+test_all(hartman3, initial_point, target_point);
 
-[bestSol, bestCost, elapsed_time] = tabu_search(beale, initial_point, target_point, max_iterations, neighborhood_size, tabu_list_size);
+function [] = test_all(f, initial_point, target_point)
+    max_iterations = 1000;
+    TS_max_iterations = 5000;
+    kMax = 5;
+    alpha = 0.01;
+    beta = 0.4;
+    tol = 1e-5;
+    epsilon = 0.5;
+    neighborhood_size = 10;
+    tabu_list_size = 5;
+    [best_sol_GD, best_cost_GD, elapsed_time_GD] = gradient_descent(f, initial_point, target_point, alpha, max_iterations, tol, epsilon);
+    [best_sol_N, best_cost_N, elapsed_time_N] = newton_method(f, initial_point,target_point, max_iterations, tol);
+    [best_sol_QN, best_cost_QN, elapsed_time_QN] = quasi_newton_method(f, initial_point, target_point, tol, max_iterations);
+    [best_sol_TR, best_cost_TR, elapsed_time_TR] = trust_region_method(f, initial_point, target_point, max_iterations);
+    [best_sol_TS, best_cost_TS, elapsed_time_TS] = tabu_search(f, initial_point, target_point, TS_max_iterations, neighborhood_size, tabu_list_size);
+    [best_sol_VNS, best_cost_VNS, elapsed_time_VNS] =  VNS(f, initial_point, target_point, max_iterations, kMax);
+    [best_sol_GDm, best_cost_GDm, elapsed_time_GDm] = gradient_descent_with_momentum(f, initial_point, target_point, alpha, beta, max_iterations, tol);
 
-% Display results
-disp('Best Solution:');
-disp(bestSol);
-disp('Best Cost:');
-disp(bestCost);
-disp('Elapsed Time:');
-disp(elapsed_time);
+    fprintf ("%-30s%-30s%-20s%-20s\n", "Method", "Minimum point", "Minimum value", "Elapsed time");
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "GD with changed alpha", strjoin(compose('%.3f', best_sol_GD), ' '), best_cost_GD, elapsed_time_GD);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "GD with momentum",strjoin(compose('%.3f', best_sol_GDm), ' '), best_cost_GDm, elapsed_time_GDm);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "Newton", strjoin(compose('%.3f', best_sol_N), ' '), best_cost_N, elapsed_time_N);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "Quasi Newton", strjoin(compose('%.3f', best_sol_QN), ' '), best_cost_QN, elapsed_time_QN);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "Trust Region", strjoin(compose('%.3f', best_sol_TR), ' '), best_cost_TR, elapsed_time_TR);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "Tabu Search", strjoin(compose('%.3f', best_sol_TS), ' '), best_cost_TS, elapsed_time_TS);
+    fprintf ("%-30s%-30s%-20.3f%-20.3f\n", "VNS", strjoin(compose('%.3f', best_sol_VNS), ' '), best_cost_VNS, elapsed_time_VNS);
+end

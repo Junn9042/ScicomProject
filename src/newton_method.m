@@ -78,7 +78,7 @@ function [best_solution, best_cost, elapsed_time] = newton_method(f, initial_poi
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Newton');
         grid on;
         hold off;
     end

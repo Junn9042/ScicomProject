@@ -60,7 +60,7 @@ function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, target_
          % Plot the contour and the best solutions
         figure;
         % Create a grid of points for the contour plot
-        [X, Y] = meshgrid(linspace(min(best_solutions(:, 1)) - 1, max(best_solutions(:, 1)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
+        [X, Y] = meshgrid(linspace(min(best_solutions(1, :)) - 1, max(best_solutions(1, :)) + 1 , 100), linspace(min(best_solutions(:, 2)) - 1, max(best_solutions(:, 2)) + 1, 100));
         Z = arrayfun(@(x, y) f([x, y]), X, Y);
     
         % Plot the contour
@@ -75,7 +75,7 @@ function [x, fval, elapsed_time] = quasi_newton_method(f, initial_point, target_
         
         xlabel('x');
         ylabel('y');
-        title('Contour Plot with Best Solution Path');
+        title('Contour Plot with Best Solution Path - Quasi Newton' );
         grid on;
         hold off;
     

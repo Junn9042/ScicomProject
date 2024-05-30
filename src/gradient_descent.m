@@ -72,7 +72,7 @@ function [xmin, fmin, elapsedTime] = gradient_descent(f, initial_point,target_po
     
         xlabel('x1');
         ylabel('x2');
-        title('Contour plot of f(x) with solution path');
+        title('Contour plot of f(x) with solution path - Gradient Descent');
         legend('Contours', 'Solution path');
         hold off;
     end
